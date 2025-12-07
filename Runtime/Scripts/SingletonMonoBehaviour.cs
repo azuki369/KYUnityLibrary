@@ -16,7 +16,7 @@ namespace KyLibrary
         {
             if (m_instance == null)
             {
-                Debug.LogErrorFormat("{0}はインスタンスが生成されずに使用されようとしています。", typeof(T).Name);
+                DebugUtil.LogErrorFormat("{0}はインスタンスが生成されずに使用されようとしています。", typeof(T).Name);
                 return null;
             }
 

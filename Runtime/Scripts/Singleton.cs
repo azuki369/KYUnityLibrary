@@ -16,7 +16,7 @@ namespace KyLibrary
             if (m_instance == null)
             {
                 m_instance = System.Activator.CreateInstance<T>();
-                Debug.LogFormat("{0}のインスタンスを生成しました。", typeof(T).Name);
+                DebugUtil.LogFormat("{0}のインスタンスを生成しました。", typeof(T).Name);
             }
         }
 
@@ -24,7 +24,7 @@ namespace KyLibrary
         {
             if (m_instance == null)
             {
-               Debug.LogErrorFormat("{0}はインスタンスが生成されずに使用されようとしています。", typeof(T).Name);
+                DebugUtil.LogErrorFormat("{0}はインスタンスが生成されずに使用されようとしています。", typeof(T).Name);
                 return null;
             }
 

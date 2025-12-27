@@ -14,6 +14,11 @@ namespace KyLib.Extensions
             return vec.x < 0.0001f && vec.y < 0.0001f && vec.z < 0.0001f;
         }
 
+        public static Vector3 SwapYAndZ(this Vector3 vec)
+        {
+            return new Vector3(vec.x, vec.z, vec.y);
+        }
+
         public static Vector3 XZ(this Vector3 vec)
         {
             return new Vector3(vec.x, 0.0f, vec.z);

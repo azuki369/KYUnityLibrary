@@ -31,7 +31,7 @@ namespace KyLibrary
         /// インスタンスを生成
         /// </summary>
         /// <param name="parent"></param>
-        public static void CreateInctance(GameObject parent)
+        public static T CreateInctance(GameObject parent)
         {
             //親があるなら
             if (parent != null)
@@ -45,6 +45,8 @@ namespace KyLibrary
                 GameObject obj = new GameObject(typeof(T).Name);
                 m_instance = obj.AddComponent<T>();
             }
+
+            return m_instance;
         }
 
     }

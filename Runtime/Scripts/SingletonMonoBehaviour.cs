@@ -11,6 +11,7 @@ namespace KyLibrary
     {
         protected static T m_instance = null;
 
+        protected bool IsInitialized => m_instance != null;
 
         public static T GetInstance()
         {

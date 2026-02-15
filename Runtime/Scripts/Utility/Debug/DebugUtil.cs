@@ -24,6 +24,11 @@ namespace KyLibrary
             UnityEngine.Debug.LogFormat(format, args);
         }
 
+        public static void LogException(System.Exception exception)
+        {
+            UnityEngine.Debug.LogException(exception);
+        }
+
         /***********************************************************************************
             Warning
         ***********************************************************************************/

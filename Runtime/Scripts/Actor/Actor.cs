@@ -47,10 +47,10 @@ namespace KyLibrary
             }
 
             //Updaterに登録
-            Updater.GetInstance().RegisterUpdater(actor);
+            actor.RegisterUpdater();
 
-            //ステート変更
-            actor.ChangeStartState();
+            //最初の実行
+            actor.EnterPlay();
 
             return actor;
         }
@@ -59,14 +59,20 @@ namespace KyLibrary
             Private
         *************************************************************************/
 
-        private void ChangeStartState()
+        private void RegisterUpdater()
         {
-            mUpdateState |= EUpdateState.Start;
+            Updater.GetInstance().RegisterUpdater(this);
         }
 
         /*************************************************************************
             Protected
         *************************************************************************/
+
+        protected virtual void EnterPlay()
+        {
+            //ステート変更
+            mUpdateState |= EUpdateState.Start;
+        }
 
         protected virtual void Entry()
         {
@@ -77,9 +83,9 @@ namespace KyLibrary
 
         protected virtual void OnLateUpdate() { }
 
-        protected void Destroy()
+        public void Destroy()
         {
-            if(!((mUpdateState & EUpdateState.Destroyed) == EUpdateState.Destroyed))
+            if(((mUpdateState & EUpdateState.Destroyed) == EUpdateState.Destroyed))
             {
                 DebugUtil.LogErrorFormat("Actorは既に破棄されています。型:{0}", this.GetType().Name);
                 return;

@@ -11,7 +11,7 @@ namespace KyLib.Extensions
 
         public static bool IsNullOrEmpty(this string str)
         {
-            return str != null && str != "";
+            return str == null || str == "";
         }
 
     }

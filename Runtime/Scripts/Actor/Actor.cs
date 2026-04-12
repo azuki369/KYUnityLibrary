@@ -47,10 +47,7 @@ namespace KyLibrary
             }
 
             //Updaterに登録
-            actor.RegisterUpdater();
-
-            //最初の実行
-            actor.EnterPlay();
+            actor.ProccesResist();
 
             return actor;
         }
@@ -58,6 +55,13 @@ namespace KyLibrary
         /*************************************************************************
             Private
         *************************************************************************/
+
+        private void ProccesResist()
+        {
+            RegisterUpdater();
+            //生成時の最初の実行
+            BeginPlay();
+        }
 
         private void RegisterUpdater()
         {
@@ -68,7 +72,7 @@ namespace KyLibrary
             Protected
         *************************************************************************/
 
-        protected virtual void EnterPlay()
+        protected virtual void BeginPlay()
         {
             //ステート変更
             mUpdateState |= EUpdateState.Start;
@@ -87,7 +91,7 @@ namespace KyLibrary
         {
             if(((mUpdateState & EUpdateState.Destroyed) == EUpdateState.Destroyed))
             {
-                DebugUtil.LogErrorFormat("Actorは既に破棄されています。型:{0}", this.GetType().Name);
+                DebugUtil.LogWarningFormat("Actorは既に破棄されています。型:{0}", this.GetType().Name);
                 return;
             }
 
@@ -136,11 +140,12 @@ namespace KyLibrary
 
         private void OnDestroy()
         {
-            //if ((mUpdateState & EUpdateState.Destroyed) != EUpdateState.Destroyed)
-            //{
-            //    //Updaterから削除
-            //    Updater.GetInstance().ReserveRemoveUpdater(this);
-            //}
+            if ((mUpdateState & EUpdateState.Destroyed) != EUpdateState.Destroyed)
+            {
+                //Updaterから削除
+                //Updater.GetInstance()?.ReserveRemoveUpdater(this);
+                Destroy();
+            }
         }
     }
 }

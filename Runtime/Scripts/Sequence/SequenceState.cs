@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 
-namespace KyLib.Sequence
+namespace KyLib
 {
     public class SequenceState
     {

@@ -13,6 +13,14 @@ namespace KyLibrary
 
         protected bool IsInitialized => m_instance != null;
 
+        public static bool HasInstance => m_instance != null;
+
+        public static bool TryGetInstance(out T instance)
+        {
+            instance = m_instance;
+            return instance != null;
+        }
+
         public static T GetInstance()
         {
             if (m_instance == null)

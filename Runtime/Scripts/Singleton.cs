@@ -10,6 +10,13 @@ namespace KyLibrary
     {
         protected static T m_instance = null;
 
+        public static bool HasInstance => m_instance != null;
+
+        public static bool TryGetInstance(out T instance)
+        {
+            instance = m_instance;
+            return instance != null;
+        }
 
         public static void CreateInstance()
         {

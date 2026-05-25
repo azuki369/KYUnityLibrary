@@ -26,9 +26,9 @@ namespace KyLibrary
         /// <summary> 更新削除インターフェースリスト </summary>
         private List<IUpdater> mRemoveUpdaterList = new List<IUpdater>();
 
-        /*************************************************************************
+        /***********************************************************************
             初期化
-        *************************************************************************/
+        ***********************************************************************/
 
         public void Initialize()
         {
@@ -37,7 +37,14 @@ namespace KyLibrary
 
         public void Destroy()
         {
+            ClearUpdaters();
             DebugUtil.Log("[Updater] Destroyed.");
+        }
+
+        public void ClearUpdaters()
+        {
+            mUpdaterList.Clear();
+            mRemoveUpdaterList.Clear();
         }
 
         /*************************************************************************

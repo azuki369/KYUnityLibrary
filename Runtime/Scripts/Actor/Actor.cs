@@ -98,7 +98,10 @@ namespace KyLibrary
             mUpdateState = EUpdateState.Destroyed;
 
             //Updater‚©‚çíœ
-            Updater.GetInstance().ReserveRemoveUpdater(this);
+            if (Updater.TryGetInstance(out var updater))
+            {
+                updater.ReserveRemoveUpdater(this);
+            }
 
             EndPlay();
 

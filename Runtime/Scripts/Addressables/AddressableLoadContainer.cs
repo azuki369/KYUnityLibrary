@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using UnityEngine.ResourceManagement.ResourceProviders;
+using UnityEngine.SceneManagement;
 
 namespace KyLibrary.Addressables
 {
@@ -60,6 +62,31 @@ namespace KyLibrary.Addressables
             T asset = await handle.LoadAsync(progress);
             onLoaded?.Invoke(asset);
             return asset;
+        }
+
+        public AddressableSceneHandle CreateSceneHandle(
+            string key,
+            LoadSceneMode loadSceneMode = LoadSceneMode.Single,
+            bool activateOnLoad = true,
+            int priority = 100)
+        {
+            AddressableSceneHandle handle = new(key, loadSceneMode, activateOnLoad, priority);
+            mHandles.Add(handle);
+            return handle;
+        }
+
+        public async UniTask<SceneInstance> LoadSceneAsync(
+            string key,
+            LoadSceneMode loadSceneMode = LoadSceneMode.Single,
+            Action<SceneInstance> onLoaded = null,
+            IProgress<float> progress = null,
+            bool activateOnLoad = true,
+            int priority = 100)
+        {
+            AddressableSceneHandle handle = CreateSceneHandle(key, loadSceneMode, activateOnLoad, priority);
+            SceneInstance scene = await handle.LoadAsync(progress);
+            onLoaded?.Invoke(scene);
+            return scene;
         }
 
         public void ReleaseAll()

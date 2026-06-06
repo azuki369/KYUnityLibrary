@@ -1,18 +1,26 @@
 using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
+using UnityEngine.SceneManagement;
 
 namespace KyLibrary.Addressables
 {
-    public sealed class AddressableAssetHandle<T> : IAddressableLoadHandle
+    public sealed class AddressableSceneHandle : IAddressableLoadHandle
     {
-        private AsyncOperationHandle<T> mHandle;
+        private readonly LoadSceneMode mLoadSceneMode;
+        private readonly bool mActivateOnLoad;
+        private readonly int mPriority;
+        private AsyncOperationHandle<SceneInstance> mHandle;
         private bool mHasHandle;
         private bool mIsReleased;
 
-        public AddressableAssetHandle(string key)
+        public AddressableSceneHandle(string key, LoadSceneMode loadSceneMode, bool activateOnLoad = true, int priority = 100)
         {
             Key = key;
+            mLoadSceneMode = loadSceneMode;
+            mActivateOnLoad = activateOnLoad;
+            mPriority = priority;
         }
 
         public string Key { get; }
@@ -23,7 +31,7 @@ namespace KyLibrary.Addressables
 
         public float PercentComplete => IsValid ? mHandle.PercentComplete : 0.0f;
 
-        public T Asset
+        public SceneInstance Scene
         {
             get
             {
@@ -36,15 +44,15 @@ namespace KyLibrary.Addressables
             }
         }
 
-        public async UniTask<T> LoadAsync(IProgress<float> progress = null)
+        public async UniTask<SceneInstance> LoadAsync(IProgress<float> progress = null)
         {
             if (IsValid)
             {
                 await WaitForCompletionAsync(progress);
-                return Asset;
+                return Scene;
             }
 
-            mHandle = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<T>(Key);
+            mHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(Key, mLoadSceneMode, mActivateOnLoad, mPriority);
             mHasHandle = true;
             mIsReleased = false;
 
@@ -54,7 +62,7 @@ namespace KyLibrary.Addressables
             {
                 Exception exception = mHandle.OperationException;
                 Release();
-                throw exception ?? new InvalidOperationException($"Failed to load addressable asset: {Key}");
+                throw exception ?? new InvalidOperationException($"Failed to load addressable scene: {Key}");
             }
 
             return mHandle.Result;
@@ -67,7 +75,7 @@ namespace KyLibrary.Addressables
                 return;
             }
 
-            UnityEngine.AddressableAssets.Addressables.Release(mHandle);
+            UnityEngine.AddressableAssets.Addressables.UnloadSceneAsync(mHandle);
             mIsReleased = true;
         }
 

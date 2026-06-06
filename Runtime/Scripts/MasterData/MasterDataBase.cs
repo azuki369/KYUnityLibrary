@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using KyLibrary;
+using KyLibrary.Addressables;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace KyLibrary
 {
@@ -66,8 +66,16 @@ namespace KyLibrary
 
         public async UniTask LoadAsync()
         {
-            var asset = await Addressables.LoadAssetAsync<TextAsset>($"Assets/MasterData/Json/{typeof(TProvider).Name}.json").ToUniTask();
-            ParseJson(asset.text);
+            AddressableLoadContainer loadContainer = new();
+            try
+            {
+                TextAsset asset = await loadContainer.LoadAssetAsync<TextAsset>($"Assets/MasterData/Json/{typeof(TProvider).Name}.json");
+                ParseJson(asset.text);
+            }
+            finally
+            {
+                loadContainer.ReleaseAll();
+            }
         }
 
         public void Load()

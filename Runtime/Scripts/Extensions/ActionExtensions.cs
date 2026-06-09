@@ -1,7 +1,7 @@
 using System;
 
 
-namespace KyLib.Extensions
+namespace KyLib
 {
     /// <summary>
     /// ActionŠg’£ƒƒ\ƒbƒh

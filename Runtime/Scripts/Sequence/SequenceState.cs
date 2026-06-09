@@ -36,7 +36,6 @@ namespace KyLib
                 {
                     mIsChangedFirstUpdate = true;
                 }
-
                 if (mStateNext != null)
                 {
                     mStatePrevious = mStateThis;
@@ -45,9 +44,12 @@ namespace KyLib
                     mIsChangedFirstUpdate = false;
                     mElapsedTime = 0.0f;
                 }
+                else
+                {
+                    mElapsedTime += DeltaTime;
+                }
 
-                mElapsedTime += DeltaTime;
-                mStateThis?.Invoke();
+                mStateThis.SafeInvoke();
             }
         }
 
